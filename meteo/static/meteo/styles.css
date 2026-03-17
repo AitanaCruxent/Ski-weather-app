@@ -1,0 +1,46 @@
+body {
+    padding: 20px;
+}
+
+.dashboard {
+    margin-top: 20px;
+}
+
+#map {
+    height: 400px;
+}
+
+@media (min-width: 992px) {
+    .dashboard {
+        height: 700px;
+    }
+
+    #map {
+        height: 100%;
+    }
+
+    .resort-column {
+        height: 100%;
+    }
+}
+
+
+/* Resort cards */
+.resort-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.resort-card:hover {
+    transform: scale(1.02);
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.resort-card.active {
+    border: 2px solid #007bff;
+    background-color: #f0f8ff;
+}

@@ -1,0 +1,104 @@
+{% extends "meteo/layout.html" %}
+{% load static %}
+
+{% block title %}Catalunya Ski Resorts{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Catalunya Ski Resorts</h1>
+
+    <div class="container-fluid dashboard">
+        <div class="row">
+
+            <!-- LEFT cards -->
+            <div class="col-lg-3 order-lg-1 col-12 order-2 resort-column">
+            {% for resort in resorts|slice:":5" %}
+            <div class="resort-card" data-name="{{ resort.name }}">
+                <h5>{{ resort.name }}</h5>
+                <p>{{ resort.region }}</p>
+                <small>{{ resort.base_elevation }}m → {{ resort.top_elevation }}m</small>
+            </div>
+            {% endfor %}
+            </div>
+
+            <!-- MAP -->
+            <div class="col-lg-6 col-12 order-1 map-column">
+            <div id="map"></div>
+            </div>
+
+            <!-- RIGHT cards -->
+            <div class="col-lg-3 order-lg-3 col-12 order-3 resort-column">
+            {% for resort in resorts|slice:"5:" %}
+            <div class="resort-card" data-name="{{ resort.name }}">
+                <h5>{{ resort.name }}</h5>
+                <p>{{ resort.region }}</p>
+                <small>{{ resort.base_elevation }}m → {{ resort.top_elevation }}m</small>
+            </div>
+            {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+{{ resorts_json|json_script:"resorts-data" }} <!-- Pass Django resort data safely to JavaScript as JSON (avoids mixing Django template syntax inside JS) -->
+<script>
+    const resorts = JSON.parse(
+    document.getElementById("resorts-data").textContent
+    );
+
+    const map = L.map('map').setView([42.2, 1.7], 8); // Centered on Catalunya
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const markers = {}; // Store markers by resort name for easy access
+
+    resorts.forEach(resort => {
+        const marker = L.marker([resort.lat, resort.lon])
+            .addTo(map)
+            .bindPopup(resort.name);
+
+        markers[resort.name] = marker; // Store marker reference for later use
+
+        // When marker is clicked, find corresponding card and highlight it
+        marker.on("click", () => {
+            document.querySelectorAll(".resort-card").forEach(c => {
+                c.classList.remove("active"); // Remove active class from all cards
+            });
+
+            const card = document.querySelector(`[data-name="${resort.name}"]`);
+            if (card) {
+                card.classList.add("active");
+                card.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        });
+    });
+
+    document.querySelectorAll(".resort-card").forEach(card => {
+        card.addEventListener("click", () => {
+            const name = card.dataset.name;
+            const marker = markers[name];
+
+            if (marker) {
+                map.setView(marker.getLatLng(), 10); // zoom in
+                marker.openPopup();
+            }
+        });
+    });
+
+</script>   
+    
+{% endblock %}
+
+
+
+
+
+</body>
+</html>
