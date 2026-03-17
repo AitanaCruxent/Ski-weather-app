@@ -15,6 +15,8 @@ def skiresorts(request):
             "name": r.name,
             "lat": float(r.latitude),
             "lon": float(r.longitude),
+            "base_elevation": r.base_elevation,
+            "top_elevation": r.top_elevation,
         }
         for r in resorts
     ]
