@@ -10,11 +10,14 @@ class Resort(models.Model):
     name = models.CharField(max_length = 64) 
     slug = models.SlugField(unique=True)
 
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=10, decimal_places=6)
-
     base_elevation = models.IntegerField()
     top_elevation = models.IntegerField()
+
+    base_lat = models.DecimalField(max_digits=9, decimal_places=6)
+    base_lon = models.DecimalField(max_digits=9, decimal_places=6)
+
+    top_lat = models.DecimalField(max_digits=9, decimal_places=6)
+    top_lon = models.DecimalField(max_digits=9, decimal_places=6)
 
     region = models.CharField(max_length=50)
     

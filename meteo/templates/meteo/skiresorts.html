@@ -54,7 +54,7 @@
     const markers = {}; // Store markers by resort name for easy access
 
     resorts.forEach(resort => {
-        const marker = L.marker([resort.lat, resort.lon])
+        const marker = L.marker([resort.top_lat, resort.top_lon])
             .addTo(map)
             .bindPopup(resort.name);
 
@@ -86,15 +86,26 @@
         });
     });
 
+
+    // Function to load weather for both base and top of a resort
     async function loadWeatherForResort(resort) {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${resort.lat}&longitude=${resort.lon}&current_weather=true`;
+        const baseWeather = await getWeather(resort.base_lat, resort.base_lon);
+        const topWeather = await getWeather(resort.top_lat, resort.top_lon);
 
-        const response = await fetch(url);
-        const data = await response.json();
-
-        return data;
+        return {
+            base: baseWeather,
+            top: topWeather
+        };
     }
 
+    async function getWeather(lat, lon) {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=snowfall,temperature_2m`;
+
+        const response = await fetch(url);
+        return await response.json();
+    }
+
+    // Load weather for all resorts and update cards
     resorts.forEach(async (resort) => {
 
         const data = await loadWeatherForResort(resort);
@@ -111,24 +122,14 @@
         const card = document.querySelector(`[data-name="${resort.name}"]`);
         if (!card) return;
 
-        const weather = data.current_weather;
-
-        const temp = weather.temperature;
-        const baseTemp = temp.toFixed(1);
-        const topTemp = (temp - 3).toFixed(1); // Simple assumption: top is 3°C colder than base, millorable s'haurien d'agafar les coordenades de la base i del top i fer dues peticions a l'API, però per simplificar-ho així ho deixo per ara
+        const base_temperature = data.base.current_weather.temperature;
+        const top_temperature = data.top.current_weather.temperature;
 
         card.innerHTML = `
             <h5>${resort.name}</h5>
+            <p> 🏔️ Base (${resort.base_elevation}m) | Temp: ${base_temperature}°C</p>
+            <p> 🏔️ Top (${resort.top_elevation}m) | Temp: ${top_temperature}°C</p>
 
-            <p>
-                <strong>Base:</strong> ${resort.base_elevation}m  
-                🌡️ ${baseTemp}°C ❄️ loading...
-            </p>
-
-            <p>
-                <strong>Top:</strong> ${resort.top_elevation}m  
-                🌡️ ${topTemp}°C ❄️ loading...
-            </p>
         `;
     }
 </script>   
