@@ -16,7 +16,7 @@
 
             <!-- LEFT cards -->
             <div class="col-lg-3 order-lg-1 col-12 order-2 resort-column">
-            {% for resort in resorts|slice:":5" %}
+            {% for resort in left_resorts%}
             <div class="resort-card" data-name="{{ resort.name }}">
             </div>
             {% endfor %}
@@ -29,7 +29,7 @@
 
             <!-- RIGHT cards -->
             <div class="col-lg-3 order-lg-3 col-12 order-3 resort-column">
-            {% for resort in resorts|slice:"5:" %}
+            {% for resort in right_resorts%}
             <div class="resort-card" data-name="{{ resort.name }}">
             </div>
             {% endfor %}

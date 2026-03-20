@@ -22,7 +22,19 @@ def skiresorts(request):
         }
         for r in resorts
     ]
+
+    left_resorts = [r for r in resorts if r.top_lon < 1.5]
+    right_resorts = [r for r in resorts if r.top_lon >= 1.5]
+
+    # Sort LEFT → west to center (ascending)
+    left_resorts.sort(key=lambda r: r.top_lon)
+
+    # Sort RIGHT → east to center (descending)
+    right_resorts.sort(key=lambda r: r.top_lon, reverse=True)
+
     return render(request, "meteo/skiresorts.html", {
         "resorts": resorts,
         "resorts_json": resorts_data,  # Pass the same data for JavaScript use
+        "left_resorts": left_resorts,
+        "right_resorts": right_resorts
     })
