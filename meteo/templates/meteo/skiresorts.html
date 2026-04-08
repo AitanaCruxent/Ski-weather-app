@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Catalunya Ski Resorts</h1>
+    <h1 class="sub-page-title">Catalunya Ski Resorts</h1>
 
     <div class="container-fluid dashboard">
         <div class="row">
@@ -86,7 +86,6 @@
         });
     });
 
-
     // Function to load weather for both base and top of a resort
     async function loadWeatherForResort(resort) {
         const baseWeather = await getWeather(resort.base_lat, resort.base_lon);
@@ -109,6 +108,9 @@
     resorts.forEach(async (resort) => {
 
         const data = await loadWeatherForResort(resort);
+        console.log(resort.name, data);
+        console.log(data.base.hourly.time);
+        console.log(data.base.hourly.snowfall);
 
         updateResortCard(resort, data);
 
@@ -125,14 +127,50 @@
         const base_temperature = data.base.current_weather.temperature;
         const top_temperature = data.top.current_weather.temperature;
 
+        const snowBase = getNextSnowfall(data.base, 6);
+        const snowTop = getNextSnowfall(data.top, 6);
+
         card.innerHTML = `
             <h5>${resort.name}</h5>
-            <p> 🏔️ Base (${resort.base_elevation}m) | Temp: ${base_temperature}°C</p>
-            <p> 🏔️ Top (${resort.top_elevation}m) | Temp: ${top_temperature}°C</p>
+            <p> 🏔️ Base (${resort.base_elevation}m) | Temp: ${base_temperature}°C</p> | Snow: ${snowBase} cm
+            <p> 🏔️ Top (${resort.top_elevation}m) | Temp: ${top_temperature}°C</p> | Snow: ${snowTop} cm
 
         `;
     }
+
+    // Helper function to find the index of the current hour in the hourly data
+    function getCurrentHourIndex(data) {
+        const now = new Date();
+
+        const times = data.hourly.time;
+
+        for (let i = 0; i < times.length; i++) {
+            const forecastTime = new Date(times[i]);
+
+            if (forecastTime >= now) {
+                console.log("NOW:", now);
+                console.log("MATCHED TIME:", forecastTime);
+                console.log("INDEX:", i);
+                return i;
+            }
+        }
+
+        return 0; // fallback
+    }
+
+    // Function to calculate total snowfall for the next hours
+    function getNextSnowfall(data, hours = 150) {
+        const startIndex = getCurrentHourIndex(data);
+
+        const slice = data.hourly.snowfall.slice(startIndex, startIndex + hours);
+
+        return data.hourly.snowfall
+            .slice(startIndex, startIndex + hours)
+            .reduce((sum, val) => sum + val, 0);
+    }
 </script>   
+
+
     
 {% endblock %}
 

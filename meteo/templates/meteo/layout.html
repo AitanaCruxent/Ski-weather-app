@@ -11,23 +11,36 @@
         {% endblock %}
     </head>
     <body>
-        <h1>Meteo</h1>
-        <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'skiresorts' %}">Ski resorts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Main Summmits</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">BPA</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Routes</a>
-                </li>
-        </ul>
-        <hr>
-        {% block body %}
-        {% endblock %}
+        <header>
+            <div class="container-header">
+                <h1 class="site-title">Meteo</h1>
+                <p class="site-subtitle">Mountain weather and ski conditions in one place</p>
+            </div>
+        </header>
+
+        <nav class="site-nav">
+            <ul class="nav custom-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'skiresorts' %}">Ski resorts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Main Summmits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">BPA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Routes</a>
+                    </li>
+            </ul>
+        </nav>
+        
+        <main class="page-content">
+            {% block body %}
+            {% endblock %}
+        </main>
+            
+        
+        
     </body>
 </html>
