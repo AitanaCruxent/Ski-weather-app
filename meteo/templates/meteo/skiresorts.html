@@ -40,9 +40,18 @@
 
 {{ resorts_json|json_script:"resorts-data" }} <!-- Pass Django resort data safely to JavaScript as JSON (avoids mixing Django template syntax inside JS) -->
 <script>
+
+// DATA
+// ------------------------------------------------------------------
+
     const resorts = JSON.parse(
-    document.getElementById("resorts-data").textContent
+        document.getElementById("resorts-data").textContent
     );
+
+    const markers = {}; // Store markers by resort name for easy access
+
+// MAP SETUP and INTERACTIONS
+// ------------------------------------------------------------------
 
     const map = L.map('map').setView([42.2, 1.7], 8); // Centered on Catalunya
 
@@ -51,7 +60,6 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const markers = {}; // Store markers by resort name for easy access
 
     resorts.forEach(resort => {
         const marker = L.marker([resort.top_lat, resort.top_lon])
@@ -60,32 +68,63 @@
 
         markers[resort.name] = marker; // Store marker reference for later use
 
-        marker.on("click", async() => {
-            // When marker is clicked, find corresponding card and highlight it
-            document.querySelectorAll(".resort-card").forEach(c => {
-                c.classList.remove("active"); // Remove active class from all cards
-            });
+        // Add click event to marker to activate corresponding card
+        marker.on("click", () => {
+            activateCardByName(resort.name);
 
             const card = document.querySelector(`[data-name="${resort.name}"]`);
             if (card) {
-                card.classList.add("active");
                 card.scrollIntoView({ behavior: "smooth", block: "center" });
             }
         });
     });
 
+    // Add click event listeners to resort cards
     document.querySelectorAll(".resort-card").forEach(card => {
         card.addEventListener("click", () => {
             const name = card.dataset.name;
             const marker = markers[name];
 
+            activateCardByName(name);
+
             if (marker) {
-                map.setView(marker.getLatLng(), 10); // zoom in
+                map.setView(marker.getLatLng(), 10);
                 marker.openPopup();
             }
         });
     });
 
+    // Remove active anc close popupwhen licking outside of cards and markers
+    document.addEventListener("click", (event) => {
+        const clickedCard = event.target.closest(".resort-card");
+        const clickedMarker = event.target.closest(".leaflet-marker-icon, .leaflet-popup");
+
+        if (!clickedCard && !clickedMarker) {
+            clearActiveCards();
+            map.closePopup();
+        }
+    });
+
+// UI HELPERS FOR CARD ACTIVATION AND MAP INTERACTIONS
+//-------------------------------------------------------------------
+    // Helper function for clicking and activate the card and marker
+    function clearActiveCards() {
+        document.querySelectorAll(".resort-card").forEach(card => {
+            card.classList.remove("active");
+        });
+    }
+
+    function activateCardByName(name) {
+        clearActiveCards();
+
+        const card = document.querySelector(`[data-name="${name}"]`);
+        if (card) {
+            card.classList.add("active");
+        }
+    }
+
+// WEATHER DATA FETCHING AND CARD UPDATING
+//-------------------------------------------------------------------
     // Function to load weather for both base and top of a resort
     async function loadWeatherForResort(resort) {
         const baseWeather = await getWeather(resort.base_lat, resort.base_lon);
@@ -108,10 +147,6 @@
     resorts.forEach(async (resort) => {
 
         const data = await loadWeatherForResort(resort);
-        console.log(resort.name, data);
-        console.log(data.base.hourly.time);
-        console.log(data.base.hourly.snowfall);
-
         updateResortCard(resort, data);
 
         // Recalculate map after content changes
@@ -119,6 +154,8 @@
 
     });
     
+//FUNCTIONS FOR CALCULATING SNOWFALL AND UPDATING CARDS
+// -------------------------------------------------------------------
     function updateResortCard(resort, data) {
 
         const card = document.querySelector(`[data-name="${resort.name}"]`);
@@ -148,9 +185,6 @@
             const forecastTime = new Date(times[i]);
 
             if (forecastTime >= now) {
-                console.log("NOW:", now);
-                console.log("MATCHED TIME:", forecastTime);
-                console.log("INDEX:", i);
                 return i;
             }
         }
@@ -175,8 +209,3 @@
 {% endblock %}
 
 
-
-
-
-</body>
-</html>
