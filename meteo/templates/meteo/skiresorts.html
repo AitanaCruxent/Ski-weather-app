@@ -50,63 +50,89 @@
 
     const markers = {}; // Store markers by resort name for easy access
 
-// MAP SETUP and INTERACTIONS
-// ------------------------------------------------------------------
-
     const map = L.map('map').setView([42.2, 1.7], 8); // Centered on Catalunya
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+//ACTIONS TO HAPPEN ON PAGE LOAD
+// ------------------------------------------------------------------
+    // Init function and functions to setup map, markers, card events, and load weather data (actions I want to happen on page load)
+    function init() {
+        setupMap();
+        setupMarkers();
+        setupCardEvents();
+        loadAllWeather();
+    }
 
+    // MAP SETUP
+    function setupMap() {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+    }
 
-    resorts.forEach(resort => {
-        const marker = L.marker([resort.top_lat, resort.top_lon])
-            .addTo(map)
-            .bindPopup(resort.name);
+    // Add markers for each resort and bind click events to activate cards and scroll to them
+    function setupMarkers() {
+        resorts.forEach(resort => {
+            const marker = L.marker([resort.top_lat, resort.top_lon])
+                .addTo(map)
+                .bindPopup(resort.name);
 
-        markers[resort.name] = marker; // Store marker reference for later use
+            markers[resort.name] = marker;
 
-        // Add click event to marker to activate corresponding card
-        marker.on("click", () => {
-            activateCardByName(resort.name);
+            marker.on("click", () => {
+                activateCardByName(resort.name);
 
-            const card = document.querySelector(`[data-name="${resort.name}"]`);
-            if (card) {
-                card.scrollIntoView({ behavior: "smooth", block: "center" });
+                const card = document.querySelector(`[data-name="${resort.name}"]`);
+                if (card) {
+                    card.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            });
+        });
+    }
+
+    // Add click event listeners to resort cards and Remove active anc close popupwhen licking outside of cards and markers
+    function setupCardEvents() {
+        document.querySelectorAll(".resort-card").forEach(card => {
+            card.addEventListener("click", () => {
+                const name = card.dataset.name;
+                const marker = markers[name];
+
+                activateCardByName(name);
+
+                if (marker) {
+                    map.setView(marker.getLatLng(), 10);
+                    marker.openPopup();
+                }
+            });
+        });
+
+        document.addEventListener("click", (event) => {
+            const clickedCard = event.target.closest(".resort-card");
+            const clickedMarker = event.target.closest(".leaflet-marker-icon, .leaflet-popup");
+
+            if (!clickedCard && !clickedMarker) {
+                clearActiveCards();
+                map.closePopup();
             }
         });
-    });
+    }
 
-    // Add click event listeners to resort cards
-    document.querySelectorAll(".resort-card").forEach(card => {
-        card.addEventListener("click", () => {
-            const name = card.dataset.name;
-            const marker = markers[name];
-
-            activateCardByName(name);
-
-            if (marker) {
-                map.setView(marker.getLatLng(), 10);
-                marker.openPopup();
-            }
+    // Load weather for all resorts and update cards
+    function loadAllWeather() {
+        resorts.forEach(async (resort) => {
+            const data = await loadWeatherForResort(resort);
+            updateResortCard(resort, data);
+            map.invalidateSize();
         });
-    });
+    }
 
-    // Remove active anc close popupwhen licking outside of cards and markers
-    document.addEventListener("click", (event) => {
-        const clickedCard = event.target.closest(".resort-card");
-        const clickedMarker = event.target.closest(".leaflet-marker-icon, .leaflet-popup");
+// UI HELPERS FOR CARD ACTIVATION AND MAP INTERACTIONS (INTERACTION LAYER)
+// -------------------------------------------------------------------
 
-        if (!clickedCard && !clickedMarker) {
-            clearActiveCards();
-            map.closePopup();
-        }
-    });
+    function getCardByName(name) {
+        return document.querySelector(`[data-name="${name}"]`);
+    }
 
-// UI HELPERS FOR CARD ACTIVATION AND MAP INTERACTIONS
-//-------------------------------------------------------------------
     // Helper function for clicking and activate the card and marker
     function clearActiveCards() {
         document.querySelectorAll(".resort-card").forEach(card => {
@@ -123,7 +149,7 @@
         }
     }
 
-// WEATHER DATA FETCHING AND CARD UPDATING
+// WEATHER DATA FETCHING AND UPDATING CARDS (DATA LAYER)
 //-------------------------------------------------------------------
     // Function to load weather for both base and top of a resort
     async function loadWeatherForResort(resort) {
@@ -140,22 +166,17 @@
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=snowfall,temperature_2m`;
 
         const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Weather request failed: ${response.status}`);
+        }
+        
         return await response.json();
     }
 
-    // Load weather for all resorts and update cards
-    resorts.forEach(async (resort) => {
+// UPDATING CARD CONTENT WITH WEATHER DATA (RENDER LAYER)
+//--------------------------------------------------------------------
 
-        const data = await loadWeatherForResort(resort);
-        updateResortCard(resort, data);
-
-        // Recalculate map after content changes
-        map.invalidateSize();
-
-    });
-    
-//FUNCTIONS FOR CALCULATING SNOWFALL AND UPDATING CARDS
-// -------------------------------------------------------------------
     function updateResortCard(resort, data) {
 
         const card = document.querySelector(`[data-name="${resort.name}"]`);
@@ -174,6 +195,9 @@
 
         `;
     }
+    
+//FUNCTIONS FOR CALCULATING SNOWFALL (LOGIC LAYER)
+// -------------------------------------------------------------------
 
     // Helper function to find the index of the current hour in the hourly data
     function getCurrentHourIndex(data) {
@@ -196,12 +220,12 @@
     function getNextSnowfall(data, hours = 150) {
         const startIndex = getCurrentHourIndex(data);
 
-        const slice = data.hourly.snowfall.slice(startIndex, startIndex + hours);
-
         return data.hourly.snowfall
             .slice(startIndex, startIndex + hours)
             .reduce((sum, val) => sum + val, 0);
     }
+
+    init(); // Call init on page load to set everything up
 </script>   
 
 
