@@ -74,6 +74,7 @@ header {
 /* Dashboard */
 .dashboard {
     margin-top: 20px;
+    min-height: 0;
 }
 
 /* Panels / sections */
@@ -105,6 +106,8 @@ header {
 
     .resort-column {
         height: 100%;
+        overflow-y: auto;
+        min-height: 0;
     }
 }
 

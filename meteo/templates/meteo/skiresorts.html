@@ -55,11 +55,11 @@
 //ACTIONS TO HAPPEN ON PAGE LOAD
 // ------------------------------------------------------------------
     // Init function and functions to setup map, markers, card events, and load weather data (actions I want to happen on page load)
-    function init() {
+    async function init() {
         setupMap();
         setupMarkers();
         setupCardEvents();
-        loadAllWeather();
+        await loadAllWeather();
     }
 
     // MAP SETUP
@@ -82,7 +82,7 @@
             marker.on("click", () => {
                 activateCardByName(resort.name);
 
-                const card = document.querySelector(`[data-name="${resort.name}"]`);
+                const card = getCardByName(resort.name);
                 if (card) {
                     card.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
@@ -118,12 +118,22 @@
     }
 
     // Load weather for all resorts and update cards
-    function loadAllWeather() {
-        resorts.forEach(async (resort) => {
-            const data = await loadWeatherForResort(resort);
-            updateResortCard(resort, data);
-            map.invalidateSize();
+    async function loadAllWeather() {
+        const promises = resorts.map(async (resort) => {
+            try {
+                const data = await loadWeatherForResort(resort);
+                updateResortCard(resort, data);
+            } catch (error) {
+                console.error(`Failed to load weather for ${resort.name}:`, error);
+                showWeatherError(resort);
+            }
         });
+
+        await Promise.all(promises);
+
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
     }
 
 // UI HELPERS FOR CARD ACTIVATION AND MAP INTERACTIONS (INTERACTION LAYER)
@@ -143,18 +153,30 @@
     function activateCardByName(name) {
         clearActiveCards();
 
-        const card = document.querySelector(`[data-name="${name}"]`);
+        const card = getCardByName(name);
         if (card) {
             card.classList.add("active");
         }
+    }
+
+    function showWeatherError(resort) {
+        const card = getCardByName(resort.name);
+        if (!card) return;
+
+        card.innerHTML = `
+            <h5>${resort.name}</h5>
+            <p>Weather unavailable right now.</p>
+        `;
     }
 
 // WEATHER DATA FETCHING AND UPDATING CARDS (DATA LAYER)
 //-------------------------------------------------------------------
     // Function to load weather for both base and top of a resort
     async function loadWeatherForResort(resort) {
-        const baseWeather = await getWeather(resort.base_lat, resort.base_lon);
-        const topWeather = await getWeather(resort.top_lat, resort.top_lon);
+        const [baseWeather, topWeather] = await Promise.all([
+            getWeather(resort.base_lat, resort.base_lon),
+            getWeather(resort.top_lat, resort.top_lon)
+        ]);
 
         return {
             base: baseWeather,
@@ -170,16 +192,17 @@
         if (!response.ok) {
             throw new Error(`Weather request failed: ${response.status}`);
         }
-        
+
         return await response.json();
     }
+
 
 // UPDATING CARD CONTENT WITH WEATHER DATA (RENDER LAYER)
 //--------------------------------------------------------------------
 
     function updateResortCard(resort, data) {
 
-        const card = document.querySelector(`[data-name="${resort.name}"]`);
+        const card = getCardByName(resort.name);
         if (!card) return;
 
         const base_temperature = data.base.current_weather.temperature;
@@ -190,9 +213,8 @@
 
         card.innerHTML = `
             <h5>${resort.name}</h5>
-            <p> 🏔️ Base (${resort.base_elevation}m) | Temp: ${base_temperature}°C</p> | Snow: ${snowBase} cm
-            <p> 🏔️ Top (${resort.top_elevation}m) | Temp: ${top_temperature}°C</p> | Snow: ${snowTop} cm
-
+            <p> 🏔️ Base (${resort.base_elevation}m) | Temp: ${base_temperature}°C | Snow: ${snowBase} cm</p>
+            <p> 🏔️ Top (${resort.top_elevation}m) | Temp: ${top_temperature}°C | Snow: ${snowTop} cm</p>
         `;
     }
     
@@ -217,7 +239,7 @@
     }
 
     // Function to calculate total snowfall for the next hours
-    function getNextSnowfall(data, hours = 150) {
+    function getNextSnowfall(data, hours = 6) {
         const startIndex = getCurrentHourIndex(data);
 
         return data.hourly.snowfall
@@ -225,7 +247,10 @@
             .reduce((sum, val) => sum + val, 0);
     }
 
-    init(); // Call init on page load to set everything up
+    // Call init on page load to set everything up
+    document.addEventListener("DOMContentLoaded", () => {
+        init();
+    });
 </script>   
 
 
