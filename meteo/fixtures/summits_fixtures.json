@@ -1,0 +1,262 @@
+[
+  {
+    "model": "meteo.summit",
+    "pk": 1,
+    "fields": {
+      "name": "Pica d'Estats",
+      "slug": "pica-destats",
+      "top_elevation": 3143,
+      "lat": "42.666952",
+      "lon": "1.397899",
+      "region": "Pallars Sobirà / Alt Pirineu",
+      "description": "Pica d'Estats is the highest summit in Catalonia and one of the great reference peaks of the Alt Pirineu. Located on the border with France, it is a classic high-mountain objective surrounded by lakes, ridges and exposed alpine weather."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 2,
+    "fields": {
+      "name": "Pic de Comaloforno",
+      "slug": "pic-de-comaloforno",
+      "top_elevation": 3029,
+      "lat": "42.591343",
+      "lon": "0.827796",
+      "region": "Alta Ribagorça / Besiberri Massif",
+      "description": "Pic de Comaloforno is the highest point of the Besiberri Massif, in the western sector of Aigüestortes i Estany de Sant Maurici National Park. Its altitude and rocky terrain make it one of the most important three-thousanders in Catalonia."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 3,
+    "fields": {
+      "name": "Tuc de Molières",
+      "slug": "tuc-de-molieres",
+      "top_elevation": 3011,
+      "lat": "42.629304",
+      "lon": "0.698541",
+      "region": "Val d'Aran / Alta Ribagorça",
+      "description": "Tuc de Molières is a high Pyrenean summit on the western edge of Catalonia, close to the Aragonese border. It is a representative peak for monitoring high-altitude conditions around the Molières valley and the upper Noguera Ribagorçana area."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 4,
+    "fields": {
+      "name": "Pic de Comalesbienes",
+      "slug": "pic-de-comalesbienes",
+      "top_elevation": 2993,
+      "lat": "42.587200",
+      "lon": "0.874900",
+      "region": "Alta Ribagorça / Vall de Boí",
+      "description": "Pic de Comalesbienes rises above the Cavallers area, close to Punta Alta de Comalesbienes and the Besiberri Massif. It is a rugged high-mountain summit in one of the most alpine sectors of the Catalan Pyrenees."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 5,
+    "fields": {
+      "name": "Pic de Peguera",
+      "slug": "pic-de-peguera",
+      "top_elevation": 2980,
+      "lat": "42.540545",
+      "lon": "1.011957",
+      "region": "Pallars Jussà / Aigüestortes",
+      "description": "Pic de Peguera is one of the major summits in the southern part of Aigüestortes i Estany de Sant Maurici National Park. Its position between glacial valleys makes it a useful high-altitude reference for the Pallars Jussà sector."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 6,
+    "fields": {
+      "name": "Puigpedrós",
+      "slug": "puigpedros",
+      "top_elevation": 2912,
+      "lat": "42.487537",
+      "lon": "1.761951",
+      "region": "Cerdanya / Eastern Pyrenees",
+      "description": "Puigpedrós is one of the highest summits in the Cerdanya area, located near the border with France. Its broad, rocky summit is a classic viewpoint over the eastern Pyrenees and the Engorgs lake basin."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 7,
+    "fields": {
+      "name": "Montardo",
+      "slug": "montardo",
+      "top_elevation": 2833,
+      "lat": "42.633279",
+      "lon": "0.875336",
+      "region": "Val d'Aran / Aigüestortes",
+      "description": "Montardo is one of the emblematic summits of the Val d'Aran side of Aigüestortes. Its isolated shape and panoramic position make it a key mountain reference above the Restanca and Colomèrs lake areas."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 8,
+    "fields": {
+      "name": "Tuc de Cigalera",
+      "slug": "tuc-de-cigalera",
+      "top_elevation": 2497,
+      "lat": "42.663513",
+      "lon": "0.982453",
+      "region": "Val d'Aran / Bonaigua",
+      "description": "Tuc de Cigalera is a compact summit near the Port de la Bonaigua, in the Aran and Àneu high-mountain environment. It is especially interesting in winter because of its exposure to snow, wind and rapid weather changes."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 9,
+    "fields": {
+      "name": "La Tosa",
+      "slug": "la-tosa",
+      "top_elevation": 2537,
+      "lat": "42.321672",
+      "lon": "1.893819",
+      "region": "Cerdanya / Cadí-Moixeró",
+      "description": "La Tosa, also known as Tosa d'Alp, is a prominent summit above La Molina and Masella. Its accessible but exposed position makes it a useful reference for weather conditions in the Cadí-Moixeró and eastern Cerdanya sector."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 10,
+    "fields": {
+      "name": "Pedraforca (Pollegó Superior)",
+      "slug": "pedraforca-pollego-superior",
+      "top_elevation": 2506,
+      "lat": "42.239925",
+      "lon": "1.702917",
+      "region": "Berguedà / Cadí-Moixeró",
+      "description": "Pedraforca is one of the most iconic mountains in Catalonia. The Pollegó Superior is its highest point, a steep and unmistakable summit where route conditions can change quickly with wind, snow or storms."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 11,
+    "fields": {
+      "name": "Tossa Plana de Lles",
+      "slug": "tossa-plana-de-lles",
+      "top_elevation": 2904,
+      "lat": "42.468066",
+      "lon": "1.657187",
+      "region": "Cerdanya / Andorra border",
+      "description": "Tossa Plana de Lles is one of the great rounded summits of Cerdanya, close to the Andorran border. Its open terrain gives wide views and makes it a strong indicator of wind and snow conditions in the central-eastern Pyrenees."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 12,
+    "fields": {
+      "name": "Puig d'Alp",
+      "slug": "puig-dalp",
+      "top_elevation": 2407,
+      "lat": "42.321867",
+      "lon": "1.906897",
+      "region": "Cerdanya / Cadí-Moixeró",
+      "description": "Puig d'Alp is a summit between Alp and Bagà, close to the La Molina and Masella mountain area. It works well as a lower high-mountain reference near La Tosa and the Coll de Pal sector."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 13,
+    "fields": {
+      "name": "Pic de Filià",
+      "slug": "pic-de-filia",
+      "top_elevation": 2772,
+      "lat": "42.473056",
+      "lon": "0.930278",
+      "region": "Pallars Jussà / Vall Fosca",
+      "description": "Pic de Filià, also known as Tossal de Paiasso, is the highest point of the mountains around the Filià valley in Vall Fosca. It is a good summit reference for the southern side of the high Pallars terrain."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 14,
+    "fields": {
+      "name": "Monteixo",
+      "slug": "monteixo",
+      "top_elevation": 2905,
+      "lat": "42.601713",
+      "lon": "1.361652",
+      "region": "Pallars Sobirà / Vall Ferrera",
+      "description": "Monteixo is a major summit above Àreu and the Vall Ferrera. Together with nearby peaks around the Aixeus lake basin, it forms a strong mountain landmark in the western Alt Pirineu."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 15,
+    "fields": {
+      "name": "Pics de Bassiero",
+      "slug": "pics-de-bassiero",
+      "top_elevation": 2903,
+      "lat": "42.606639",
+      "lon": "0.995307",
+      "region": "Pallars Sobirà / Aigüestortes",
+      "description": "Pics de Bassiero form a high rocky group near the Gerber valley and the Aigüestortes area. The western point, Punta Brulle, is a notable summit and a useful reference for conditions between the Aran, Àneu and Sant Maurici sectors."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 16,
+    "fields": {
+      "name": "Mont-roig",
+      "slug": "mont-roig",
+      "top_elevation": 2864,
+      "lat": "42.684000",
+      "lon": "1.169000",
+      "region": "Pallars Sobirà / Alt Pirineu",
+      "description": "Mont-roig is a high summit in the northern Pallars Sobirà, within the Alt Pirineu Natural Park. It dominates a remote lake-filled area and is a useful reference for the Tavascan and northern Pallars mountain sector."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 17,
+    "fields": {
+      "name": "Pic de Certascan",
+      "slug": "pic-de-certascan",
+      "top_elevation": 2853,
+      "lat": "42.711939",
+      "lon": "1.277682",
+      "region": "Pallars Sobirà / Tavascan",
+      "description": "Pic de Certascan rises above the Certascan lake and refuge area, in the Alt Pirineu Natural Park. It is one of the most important summits in the Tavascan sector and a strong reference for northern Pallars conditions."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 18,
+    "fields": {
+      "name": "Pic de Ventolau",
+      "slug": "pic-de-ventolau",
+      "top_elevation": 2851,
+      "lat": "42.678500",
+      "lon": "1.165500",
+      "region": "Pallars Sobirà / Alt Pirineu",
+      "description": "Pic de Ventolau is a high summit between La Guingueta d'Àneu and Lladorre, close to the Mont-roig massif. Its position gives wide views over the Alt Pirineu and makes it relevant for weather in the Tavascan and Àneu sectors."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 19,
+    "fields": {
+      "name": "Bastiments",
+      "slug": "bastiments",
+      "top_elevation": 2881,
+      "lat": "42.426120",
+      "lon": "2.233080",
+      "region": "Ripollès / Vallter",
+      "description": "Bastiments is one of the highest and most visited summits in the eastern Pyrenees, above Vallter and close to the French border. Its exposed ridge is an excellent reference for wind, snow and temperature in the Ripollès sector."
+    }
+  },
+  {
+    "model": "meteo.summit",
+    "pk": 20,
+    "fields": {
+      "name": "Montsent de Pallars",
+      "slug": "montsent-de-pallars",
+      "top_elevation": 2883,
+      "lat": "42.510500",
+      "lon": "1.013000",
+      "region": "Pallars Jussà / Vall Fosca",
+      "description": "Montsent de Pallars is a prominent summit between Vall Fosca and Vall d'Àssua. Its isolated position and broad alpine slopes make it one of the main viewpoints and weather references in the southern Pallars high mountains."
+    }
+  }
+]
