@@ -1,0 +1,251 @@
+{% extends "meteo/layout.html" %}
+{% load static %}
+
+{% block title %}Catalunya Main Summits{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="sub-page-title">Catalunya Main Summits</h1>
+
+    <div class="container-fluid dashboard">
+        <div class="row">
+
+            <!-- LEFT cards -->
+            <div class="col-lg-3 order-lg-1 col-12 order-2 resort-column">
+            {% for summit in left_summits%}
+            <div class="summit-card" data-name="{{ summit.name }}">
+            </div>
+            {% endfor %}
+            </div>
+
+            <!-- MAP -->
+            <div class="col-lg-6 col-12 order-1 map-column">
+            <div id="map"></div>
+            </div>
+
+            <!-- RIGHT cards -->
+            <div class="col-lg-3 order-lg-3 col-12 order-3 resort-column">
+            {% for summit in right_summits%}
+            <div class="summit-card" data-name="{{ summit.name }}">
+            </div>
+            {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+{{ summits_json|json_script:"summits-data" }} <!-- Pass Django summit data safely to JavaScript as JSON (avoids mixing Django template syntax inside JS) -->
+<script>
+
+// DATA
+// ------------------------------------------------------------------
+
+    const summits = JSON.parse(
+        document.getElementById("summits-data").textContent
+    );
+
+    const markers = {}; // Store markers by summit name for easy access
+
+    const map = L.map('map').setView([42.2, 1.7], 8); // Centered on Catalunya
+
+//ACTIONS TO HAPPEN ON PAGE LOAD
+// ------------------------------------------------------------------
+    // Init function and functions to setup map, markers, card events, and load weather data (actions I want to happen on page load)
+    async function init() {
+        setupMap();
+        setupMarkers();
+        setupCardEvents();
+        await loadAllWeather();
+    }
+
+    // MAP SETUP
+    function setupMap() {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+    }
+
+    // Add markers for each summit and bind click events to activate cards and scroll to them
+    function setupMarkers() {
+        summits.forEach(summit => {
+            const marker = L.marker([summit.lat, summit.lon])
+                .addTo(map)
+                .bindPopup(summit.name);
+
+            markers[summit.name] = marker;
+
+            marker.on("click", () => {
+                activateCardByName(summit.name);
+
+                const card = getCardByName(summit.name);
+                if (card) {
+                    card.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            });
+        });
+    }
+
+    // Add click event listeners to summit cards and Remove active anc close popupwhen licking outside of cards and markers
+    function setupCardEvents() {
+        document.querySelectorAll(".summit-card").forEach(card => {
+            card.addEventListener("click", () => {
+                const name = card.dataset.name;
+                const marker = markers[name];
+
+                activateCardByName(name);
+
+                if (marker) {
+                    map.setView(marker.getLatLng(), 10);
+                    marker.openPopup();
+                }
+            });
+        });
+
+        document.addEventListener("click", (event) => {
+            const clickedCard = event.target.closest(".summit-card");
+            const clickedMarker = event.target.closest(".leaflet-marker-icon, .leaflet-popup");
+
+            if (!clickedCard && !clickedMarker) {
+                clearActiveCards();
+                map.closePopup();
+            }
+        });
+    }
+
+    // Load weather for all summits and update cards
+    async function loadAllWeather() {
+        const promises = summits.map(async (summit) => {
+            try {
+                const data = await loadWeatherForSummit(summit);
+                updateSummitCard(summit, data);
+            } catch (error) {
+                console.error(`Failed to load weather for ${summit.name}:`, error);
+                showWeatherError(summit);
+            }
+        });
+
+        await Promise.all(promises);
+
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
+    }
+
+// UI HELPERS FOR CARD ACTIVATION AND MAP INTERACTIONS (INTERACTION LAYER)
+// -------------------------------------------------------------------
+
+    function getCardByName(name) {
+        return document.querySelector(`[data-name="${name}"]`);
+    }
+
+    // Helper function for clicking and activate the card and marker
+    function clearActiveCards() {
+        document.querySelectorAll(".summit-card").forEach(card => {
+            card.classList.remove("active");
+        });
+    }
+
+    function activateCardByName(name) {
+        clearActiveCards();
+
+        const card = getCardByName(name);
+        if (card) {
+            card.classList.add("active");
+        }
+    }
+
+    function showWeatherError(summit) {
+        const card = getCardByName(summit.name);
+        if (!card) return;
+
+        card.innerHTML = `
+            <h5>${summit.name}</h5>
+            <p>Weather unavailable right now.</p>
+        `;
+    }
+
+// WEATHER DATA FETCHING AND UPDATING CARDS (DATA LAYER)
+//-------------------------------------------------------------------
+    // Function to load weather
+    async function loadWeatherForSummit(summit) {
+        return await getWeather(summit.lat, summit.lon);
+    }
+    
+    async function getWeather(lat, lon) {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=snowfall,temperature_2m`;
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Weather request failed: ${response.status}`);
+        }
+
+        return await response.json();
+    }
+
+
+// UPDATING CARD CONTENT WITH WEATHER DATA (RENDER LAYER)
+//--------------------------------------------------------------------
+
+    function updateSummitCard(summit, data) {
+
+        const card = getCardByName(summit.name);
+        if (!card) return;
+
+        const temperature = data.current_weather.temperature;
+
+        const snow = getNextSnowfall(data, 6);
+
+        card.innerHTML = `
+            <h5>${summit.name}</h5>
+            <p> 🏔️ Top (${summit.top_elevation}m) | Temp: ${temperature}°C | Snow: ${snow} cm</p>
+        `;
+    }
+    
+//FUNCTIONS FOR CALCULATING SNOWFALL (LOGIC LAYER)
+// -------------------------------------------------------------------
+
+    // Helper function to find the index of the current hour in the hourly data
+    function getCurrentHourIndex(data) {
+        const now = new Date();
+
+        const times = data.hourly.time;
+
+        for (let i = 0; i < times.length; i++) {
+            const forecastTime = new Date(times[i]);
+
+            if (forecastTime >= now) {
+                return i;
+            }
+        }
+
+        return 0; // fallback
+    }
+
+    // Function to calculate total snowfall for the next hours
+    function getNextSnowfall(data, hours = 6) {
+        const startIndex = getCurrentHourIndex(data);
+
+        return data.hourly.snowfall
+            .slice(startIndex, startIndex + hours)
+            .reduce((sum, val) => sum + val, 0);
+        
+            return total.toFixed(1);
+    }
+
+    // Call init on page load to set everything up
+    document.addEventListener("DOMContentLoaded", () => {
+        init();
+    });
+</script>   
+
+
+    
+{% endblock %}
+
+

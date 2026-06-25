@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Resort
+from .models import Resort, Summit
 
 # Create your views here.
 
@@ -37,4 +37,33 @@ def skiresorts(request):
         "resorts_json": resorts_data,  # Pass the same data for JavaScript use
         "left_resorts": left_resorts,
         "right_resorts": right_resorts
+    })
+
+def summits(request):
+    summits = Summit.objects.all()
+    summits_data = [
+        {
+            "id": s.id,
+            "name": s.name,
+            "lat": s.lat,
+            "lon": s.lon,
+            "top_elevation": s.top_elevation,
+        }
+        for s in summits
+    ]
+
+    left_summits = [s for s in summits if s.lon < 1.2]
+    right_summits = [s for s in summits if s.lon >= 1.2]
+
+    # Sort LEFT → west to center (ascending)
+    left_summits.sort(key=lambda s: s.lon)
+
+    # Sort RIGHT → east to center (descending)
+    right_summits.sort(key=lambda s: s.lon)
+
+    return render(request, "meteo/summits.html", {
+        "summits": summits,
+        "summits_json": summits_data,  # Pass the same data for JavaScript use
+        "left_summits": left_summits,
+        "right_summits": right_summits
     })
