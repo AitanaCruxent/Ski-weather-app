@@ -67,3 +67,6 @@ def summits(request):
         "left_summits": left_summits,
         "right_summits": right_summits
     })
+
+def bpa(request):
+    return render(request, "meteo/bpa.html")

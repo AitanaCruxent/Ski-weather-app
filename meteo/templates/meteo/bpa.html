@@ -1,0 +1,29 @@
+{% extends "meteo/layout.html" %}
+
+{% block title %}Avalanche Danger{% endblock %}
+
+{% block body %}
+<h1 class="sub-page-title">Avalanche Danger Bulletin</h1>
+
+<p class="page-intro">
+    Official avalanche danger information for the Catalan Pyrenees,
+    provided by the ICGC. This information is valid outside ski slopes
+    and uncontrolled areas.
+</p>
+
+<div class="avalanche-frame-wrapper">
+    <iframe
+        src="https://bpa.icgc.cat/"
+        class="avalanche-frame"
+        loading="lazy">
+    </iframe>
+</div>
+
+<p class="source-note">
+        Source: Institut Cartogràfic i Geològic de Catalunya (ICGC) —
+        Avalanche Danger Bulletin.
+        <a href="https://bpa.icgc.cat/" target="_blank" rel="noopener noreferrer">
+            View official bulletin
+        </a>
+</p>
+{% endblock %}
