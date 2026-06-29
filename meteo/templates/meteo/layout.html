@@ -14,6 +14,28 @@
     </head>
     <body>
         <header>
+            <div class="login-container">
+                <div>
+                    {% if user.is_authenticated %}
+                        Signed in as <strong>{{ user.username }}</strong>.
+                    {% endif %}
+                </div>
+    
+                <ul class="nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
             <div class="container-header">
                 <h1 class="site-title">Meteo</h1>
                 <p class="site-subtitle">Mountain weather and ski conditions in one place</p>
@@ -22,6 +44,7 @@
 
         <nav class="site-nav">
             <ul class="nav custom-nav">
+                {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'skiresorts' %}">Ski resorts</a>
                     </li>
@@ -34,6 +57,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="">Routes</a>
                     </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'skiresorts' %}">Ski resorts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'summits' %}">Summits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'bpa' %}">BPA</a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
         
