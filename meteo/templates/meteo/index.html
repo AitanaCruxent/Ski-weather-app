@@ -1,6 +1,40 @@
 {% extends "meteo/layout.html" %}
 {% load static %}
 
+{% block title %}PiriNeu - Home{% endblock %}
+
 {% block body %}
+{% if user.is_authenticated %}
+
+
+{% else %}
+
+<div class="home-not-logged">
+    <div class="home-column">
+        <div class="app-description">
+            <p>❄️Check out Catalunya's snow forecast at a glance.</p>
+            <p>🏔️Share your routes and weather insights.</p>
+            <p>⚠️Check the avalanche information to plan your journey</p>
+        </div>
+        <div class="card-message">
+            <h3><a href="{% url 'login' %}">Log in</a> to start!</h3>
+
+            <p>
+                Don't have an account?
+                <a href="{% url 'register' %}">Register here.</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="home-column">
+        <div class="images-column">
+            <img class="home-image image-one" src={% static 'images/Skiresorts.png' %} alt="Ski Resorts Page">
+            <img class="home-image image-two" src={% static 'images/Mainsummits.png' %} alt="Ski Resorts Page">
+            <img class="home-image image-three" src={% static 'images/Bpa.png' %} alt="Ski Resorts Page">
+        </div>
+    </div>
+</div>
+
+{% endif %}
 
 {% endblock %}

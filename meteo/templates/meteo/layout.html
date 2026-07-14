@@ -16,9 +16,10 @@
         <header class="main-header">
             <nav class="navbar-custom">
                 <div class="nav-brand">
-                    <a href="{% url 'index' %}">SkiCat</a>
+                    <a href="{% url 'index' %}">PiriNeu</a>
                 </div>
 
+                {% if user.is_authenticated %}
                 <ul class="nav nav-main">
                     <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'skiresorts' %}">Ski resorts</a></li>
@@ -26,6 +27,9 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'bpa' %}">BPA</a></li>
                     <li class="nav-item"><a class="nav-link" href="">Routes</a></li>
                 </ul>
+                {% else %}
+                <p class="nav-message"></p>
+                {% endif %}
 
                 <ul class="nav nav-auth">
                     {% if user.is_authenticated %}
