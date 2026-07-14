@@ -1,0 +1,115 @@
+{% extends "meteo/layout.html" %}
+{% load static %}
+
+{% block title %}My Routes{% endblock %}
+
+{% block body %}
+
+<!-- To display messages -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+<section class="routes-page">
+    <div class="routes-header">
+        <div>
+            <h1>My Routes</h1>
+            <p>Keep track of the mountain routes you have completed.</p>
+        </div>
+
+        <button id="show-form" type="button">Add route</button>
+
+        <!--Hidden form for when adding a route-->
+        <div id="form-content" style="display: none">
+            <form action="{% url 'addroute' %}" method="post" class="addroute-form">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Route name" required>
+                <input type="text" name="description" placeholder="Description">
+                <input type="number" name="distance_km" placeholder="Distance in km">
+                <input type="number" name="duration_minutes" placeholder="Duration in minutes">
+                <input type="date" name="date_completed" placeholder="Date when route was completed">
+                
+                <input type="submit" value="Add">
+                <button id="hide-form" type="button">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    {% if routes %}
+        <div class="routes-grid">
+            {% for route in routes %}
+                <article class="route-card">
+                    <h2>
+                        <a href="">
+                            {{ route.name }}
+                        </a>
+                    </h2>
+
+                    {% if route.date_completed %}
+                        <p>
+                            Completed on {{ route.date_completed }}
+                        </p>
+                    {% endif %}
+
+                    {% if route.distance_km %}
+                        <p>
+                            Distance: {{ route.distance_km }} km
+                        </p>
+                    {% endif %}
+
+                    {% if route.duration_minutes %}
+                        <p>
+                            Duration: {{ route.duration_minutes }} minutes
+                        </p>
+                    {% endif %}
+
+                    <a href="">
+                        Edit
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div class="empty-state">
+            <h2>You have not saved any routes yet.</h2>
+
+            <p>
+                Add your first route to start building your personal log.
+            </p>
+
+            <a href="" class="button">
+                Add your first route
+            </a>
+        </div>
+    {% endif %}
+</section>
+
+
+<script>
+
+    //Toggle addroute form visibility
+    const showFormBtn = document.getElementById("show-form");
+    const addForm = document.getElementById("form-content");
+    const cancelForm = document.getElementById("hide-form");
+
+    showFormBtn.addEventListener("click", function(){
+        addForm.style.display = "block";
+        showFormBtn.style.display ="none";
+    })
+
+    cancelForm.addEventListener("click", function(){
+        addForm.style.display = "none";
+        showFormBtn.style.display = "inline-block";
+    })
+    
+       
+</script>
+
+{% endblock %}

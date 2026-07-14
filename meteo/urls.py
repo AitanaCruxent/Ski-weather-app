@@ -9,5 +9,7 @@ urlpatterns = [
     path("skiresorts/", views.skiresorts, name="skiresorts"),
     path("summits/", views.summits, name="summits"),
     path("bpa/", views.bpa, name="bpa"),
+    path("myroutes/", views.myroutes, name="myroutes"),
+    path("addroute", views.addroute, name="addroute")
 ]
     

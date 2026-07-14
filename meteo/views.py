@@ -1,11 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Resort, Summit
+from .models import User, Resort, Summit, Route
 
 
 def index(request):
@@ -60,7 +61,7 @@ def register(request):
     else:
         return render(request, "meteo/register.html")
        
-
+@login_required
 def skiresorts(request):
     resorts = Resort.objects.all()
     resorts_data = [
@@ -93,6 +94,7 @@ def skiresorts(request):
         "right_resorts": right_resorts
     })
 
+@login_required
 def summits(request):
     summits = Summit.objects.all()
     summits_data = [
@@ -122,5 +124,41 @@ def summits(request):
         "right_summits": right_summits
     })
 
+@login_required
 def bpa(request):
     return render(request, "meteo/bpa.html")
+
+@login_required
+def myroutes(request):
+    routes = Route.objects.filter(owner=request.user).order_by("-date_completed", "-timestamp")
+
+    return render(request, "meteo/myroutes.html", {
+        "routes": routes
+    })
+
+@login_required
+def addroute(request):
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        distance_km = request.POST.get("distance_km")
+        duration_minutes = request.POST.get("duration_minutes")
+        date_completed = request.POST.get("date_completed")
+
+    if not name:
+        messages.error(request, "Please fill in the required field: name.")
+        return redirect("addroute")  
+    
+    new_route = Route(
+        owner = request.user,
+        name = name,
+        description = description,
+        distance_km = distance_km,
+        duration_minutes = duration_minutes,
+        date_completed = date_completed
+    )
+
+    new_route.save()
+    messages.success(request, "Your route was saved successfully")
+    return redirect("myroutes")
