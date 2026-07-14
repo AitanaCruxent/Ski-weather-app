@@ -15,28 +15,34 @@
             {% endfor %}
         </div>
     {% endif %}
-    
-<section class="routes-page">
-    <div class="routes-header">
-        <div>
-            <h1>My Routes</h1>
+
+<h1 class="sub-page-title">My Routes</h1>
+
+<section class="routes-content">
+    <div class="addroute-section">
+        <div class="display-form-zone">
             <p>Keep track of the mountain routes you have completed.</p>
+            <button class="button-form" id="show-form" type="button">Add a new route</button>
         </div>
 
-        <button id="show-form" type="button">Add route</button>
-
         <!--Hidden form for when adding a route-->
-        <div id="form-content" style="display: none">
+        <div id="form-content" class="form-content">
             <form action="{% url 'addroute' %}" method="post" class="addroute-form">
                 {% csrf_token %}
-                <input type="text" name="name" placeholder="Route name" required>
-                <input type="text" name="description" placeholder="Description">
-                <input type="number" name="distance_km" placeholder="Distance in km">
-                <input type="number" name="duration_minutes" placeholder="Duration in minutes">
-                <input type="date" name="date_completed" placeholder="Date when route was completed">
-                
-                <input type="submit" value="Add">
-                <button id="hide-form" type="button">Cancel</button>
+                <input type="text" name="name" placeholder="Route name" required class="form-field">
+
+                <textarea name="description" placeholder="Description" class="form-field"></textarea>
+
+                <div class="form-extra-info">
+                    <input type="number" name="distance_km" placeholder="Distance in km">
+                    <input type="number" name="duration_minutes" placeholder="Duration in minutes">
+                    <input type="date" name="date_completed" placeholder="Date when route was completed">
+                </div>
+
+                <div class="form-actions">
+                    <input class="button-form" type="submit" value="Add">
+                    <button class="button-form" id="hide-form" type="button">Close</button>
+                </div>
             </form>
         </div>
     </div>
@@ -68,10 +74,6 @@
                             Duration: {{ route.duration_minutes }} minutes
                         </p>
                     {% endif %}
-
-                    <a href="">
-                        Edit
-                    </a>
                 </article>
             {% endfor %}
         </div>
@@ -100,15 +102,17 @@
     const cancelForm = document.getElementById("hide-form");
 
     showFormBtn.addEventListener("click", function(){
-        addForm.style.display = "block";
+        addForm.classList.add("open");
         showFormBtn.style.display ="none";
     })
 
     cancelForm.addEventListener("click", function(){
-        addForm.style.display = "none";
-        showFormBtn.style.display = "inline-block";
-    })
-    
+        addForm.classList.remove("open");
+
+        setTimeout(function() {
+            showFormBtn.style.display = "inline-block";
+        }, 300);
+    });    
        
 </script>
 

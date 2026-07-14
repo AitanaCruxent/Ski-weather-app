@@ -275,4 +275,128 @@ BPA Styles
     border: 0;
 }
 
+/*-----------------------------------------------------
+My Route Styles
+---------------------------------------------------------*/
+
+.routes-content {
+    padding: 25px;
+}
+
+.display-form-zone{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.display-form-zone p {
+    margin: 0;
+}
+
+.button-form {
+    padding: 5px 10px;
+    color: white;
+    background: linear-gradient(135deg, #1e3a5f, #2b6cb0);
+    border: 0px;
+    border-radius: 35px;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.09);
+}
+
+@media (max-width: 600px) {
+    .display-form-zone {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Once the form is opened */
+.form-content {
+    margin: 20px auto 30px;
+    padding: 28px 20px;
+    background: linear-gradient(135deg, #1e3a5f, #2b6cb0);
+    border-radius: 10px;
+
+    /*Transition when displaying the content*/
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
+
+    transition: 
+        max-height 0.4s ease,
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.form-content.open {
+    max-height: 600px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+
+.addroute-form {
+    max-width: 880px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.form-field {
+    width: 100%;
+}
+
+.form-extra-info {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+#form-content input,
+#form-content textarea,
+#form-content button {
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+#form-content textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.button-form {
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .form-extra-info {
+        grid-template-columns: 1fr;
+    }
+
+    .addroute-form {
+        max-width: 100%;
+    }
+}
+
+/* Existing Routes content*/
+
+.routes-grid{
+    margin-top: 10px;
+
+}
 
