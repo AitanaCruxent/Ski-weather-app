@@ -280,7 +280,7 @@ My Route Styles
 ---------------------------------------------------------*/
 
 .routes-content {
-    padding: 25px;
+    padding: 0 40px 0 40px;
 }
 
 .display-form-zone{
@@ -301,6 +301,13 @@ My Route Styles
     border: 0px;
     border-radius: 35px;
     box-shadow: 0 15px 35px rgba(15, 23, 42, 0.09);
+}
+
+.button-form:hover {
+    transform: scale(1.02);
+    transition: 0.2s;
+    cursor: pointer;
+
 }
 
 @media (max-width: 600px) {
@@ -397,6 +404,27 @@ My Route Styles
 
 .routes-grid{
     margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
 
 }
 
+@media (max-width: 700px) {
+    .routes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.route-card {
+    padding: 20px;
+    border: 1px solid rgba(175, 173, 173, 0.248);
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.09);
+
+}
+
+.route-card:hover {
+    transform: scale(1.02);
+    transition: 0.2s;
+}

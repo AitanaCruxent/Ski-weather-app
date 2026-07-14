@@ -51,11 +51,9 @@
         <div class="routes-grid">
             {% for route in routes %}
                 <article class="route-card">
-                    <h2>
-                        <a href="">
-                            {{ route.name }}
-                        </a>
-                    </h2>
+                    <h3>
+                        {{ route.name }}
+                    </h3>
 
                     {% if route.date_completed %}
                         <p>
