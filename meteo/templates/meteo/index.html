@@ -33,52 +33,54 @@
 
     <section class="home-routes">
         <h2>Routes shared by the PiriNeu community</h2>
-        {% if routes %}
-            {% for route in routes %}
-                <article class="route-card">
-                            <h3>
-                                {{ route.name }}
-                            </h3>
+        <div class="home-grid">
+            {% if routes %}
+                {% for route in routes %}
+                    <article class="route-card">
+                                <h3>
+                                    {{ route.name }}
+                                </h3>
 
-                            {% if route.date_completed %}
+                                {% if route.date_completed %}
+                                    <p>
+                                        Completed on <span style= "font-weight: 700">{{ route.date_completed }}</span>
+                                    </p>
+                                {% endif %}
+
                                 <p>
-                                    Completed on {{ route.date_completed }}
+                                    Completed by <span style= "font-weight: 700">{{ route.owner }}</span>
                                 </p>
-                            {% endif %}
-
-                            <p>
-                                Completed by {{ route.owner }}
-                            </p>
 
 
-                            {% if route.distance_km %}
-                                <p>
-                                    Distance: {{ route.distance_km }} km
-                                </p>
-                            {% endif %}
+                                {% if route.distance_km %}
+                                    <p>
+                                        Distance: {{ route.distance_km }} km
+                                    </p>
+                                {% endif %}
 
-                            {% if route.duration_minutes %}
-                                <p>
-                                    Duration: {{ route.duration_minutes }} minutes
-                                </p>
-                            {% endif %}
-                        </article>
-                    {% endfor %}
-                </div>
+                                {% if route.duration_minutes %}
+                                    <p>
+                                        Duration: {{ route.duration_minutes }} minutes
+                                    </p>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    </div>
 
-            {% else %}
-                <div class="empty-state">
-                    <h2>There is no routes at the moment</h2>
+                {% else %}
+                    <div class="empty-state">
+                        <h2>There is no routes at the moment</h2>
 
-                    <p>
-                        Add your first route to start building your personal log.
-                    </p>
+                        <p>
+                            Add your first route to start building your personal log.
+                        </p>
 
-                    <a href="{% url 'myroutes' %}">
-                        Add your first route
-                    </a>
-                </div>
-        {% endif %}
+                        <a href="{% url 'myroutes' %}">
+                            Add your first route
+                        </a>
+                    </div>
+            {% endif %}
+        </div>
     </section>
 
 
