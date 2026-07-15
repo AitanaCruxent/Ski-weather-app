@@ -131,16 +131,6 @@ Home styles
     text-align: center;
 }
 
-@media (max-width: 900px) {
-    .web-overview {
-        grid-template-columns: 1fr;
-    }
-
-    .home-card-image {
-        height: 220px;
-    }
-}
-
 .home-routes {
     padding: 30px;
     margin-top: 20px;
@@ -151,6 +141,20 @@ Home styles
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+}
+
+@media (max-width: 900px) {
+    .web-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .home-card-image {
+        height: 220px;
+    }
+
+    .home-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Not authenticated*/
