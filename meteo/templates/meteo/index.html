@@ -6,6 +6,81 @@
 {% block body %}
 {% if user.is_authenticated %}
 
+    <section class="web-overview">
+
+        <a href="{% url 'skiresorts' %}" class="home-card">
+            <div class="home-card-image">
+                <img src="{% static 'images/Skiresorts.png' %}" alt="Ski Resorts Page">
+            </div>
+            <p>Check real-time weather for ski resorts</p>
+        </a>
+
+        <a href="{% url 'summits' %}" class="home-card">
+            <div class="home-card-image">
+                <img src="{% static 'images/Mainsummits.png' %}" alt="Main Summits Page">
+            </div>
+            <p>Check the weather for Catalunya's main summits</p>
+        </a>
+
+        <a href="{% url 'bpa' %}" class="home-card">
+            <div class="home-card-image">
+                <img src="{% static 'images/Bpa.png' %}" alt="BPA Page">
+            </div>
+            <p>Check the updated avalanche forecast</p>
+        </a>
+
+    </section>
+
+    <section class="home-routes">
+        <h2>Routes shared by the PiriNeu community</h2>
+        {% if routes %}
+            {% for route in routes %}
+                <article class="route-card">
+                            <h3>
+                                {{ route.name }}
+                            </h3>
+
+                            {% if route.date_completed %}
+                                <p>
+                                    Completed on {{ route.date_completed }}
+                                </p>
+                            {% endif %}
+
+                            <p>
+                                Completed by {{ route.owner }}
+                            </p>
+
+
+                            {% if route.distance_km %}
+                                <p>
+                                    Distance: {{ route.distance_km }} km
+                                </p>
+                            {% endif %}
+
+                            {% if route.duration_minutes %}
+                                <p>
+                                    Duration: {{ route.duration_minutes }} minutes
+                                </p>
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <div class="empty-state">
+                    <h2>There is no routes at the moment</h2>
+
+                    <p>
+                        Add your first route to start building your personal log.
+                    </p>
+
+                    <a href="{% url 'myroutes' %}">
+                        Add your first route
+                    </a>
+                </div>
+        {% endif %}
+    </section>
+
 
 {% else %}
 
@@ -28,9 +103,9 @@
 
     <div class="home-column">
         <div class="images-column">
-            <img class="home-image image-one" src={% static 'images/Skiresorts.png' %} alt="Ski Resorts Page">
-            <img class="home-image image-two" src={% static 'images/Mainsummits.png' %} alt="Ski Resorts Page">
-            <img class="home-image image-three" src={% static 'images/Bpa.png' %} alt="Ski Resorts Page">
+            <img class="home-image image-one" src="{% static 'images/Skiresorts.png' %}" alt="Ski Resorts Page">
+            <img class="home-image image-two" src="{% static 'images/Mainsummits.png' %}" alt="Main Summits Page">
+            <img class="home-image image-three" src="{% static 'images/Bpa.png' %}" alt="BPS Page">
         </div>
     </div>
 </div>

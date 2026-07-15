@@ -10,7 +10,12 @@ from .models import User, Resort, Summit, Route
 
 
 def index(request):
-    return render(request, "meteo/index.html")
+
+    routes = Route.objects.order_by("-date_completed", "-timestamp")
+
+    return render(request, "meteo/index.html", {
+        "routes": routes
+    })
 
 def login_view(request):
     if request.method == "POST":
