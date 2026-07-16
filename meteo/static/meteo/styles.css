@@ -74,6 +74,12 @@ body {
     padding: 30px 0;
 }
 
+#messages {
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+
 /*-------------------------------------------------
 Home styles
 --------------------------------------------------*/
@@ -438,11 +444,19 @@ My Route Styles
     width: 100%;
 }
 
+
+.form-main-info{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
 .form-extra-info {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
 
 .form-actions {
@@ -453,7 +467,8 @@ My Route Styles
 
 #form-content input,
 #form-content textarea,
-#form-content button {
+#form-content button,
+#form-content select {
     border: none;
     padding: 16px;
     border-radius: 12px;
@@ -480,11 +495,11 @@ My Route Styles
 }
 
 /* Existing Routes content*/
-
 .routes-grid{
     margin-top: 10px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
     gap: 15px;
 
 }
@@ -507,3 +522,34 @@ My Route Styles
     transform: scale(1.02);
     transition: 0.2s;
 }
+
+.route-header{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+
+.sub-header {
+    display: flex;
+    font-weight: 700;
+    gap: 5px;
+}
+
+.dist-time {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.time {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.dist-time p {
+    margin: 0;
+}
+
+

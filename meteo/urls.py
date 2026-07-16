@@ -10,6 +10,7 @@ urlpatterns = [
     path("summits/", views.summits, name="summits"),
     path("bpa/", views.bpa, name="bpa"),
     path("myroutes/", views.myroutes, name="myroutes"),
-    path("addroute", views.addroute, name="addroute")
+    path("addroute", views.addroute, name="addroute"),
+    path("myroutes/<int:route_id>/delete/", views.deleteroute, name="deleteroute"),
 ]
     

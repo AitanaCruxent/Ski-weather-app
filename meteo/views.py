@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 from .models import User, Resort, Summit, Route
 
@@ -138,7 +139,8 @@ def myroutes(request):
     routes = Route.objects.filter(owner=request.user).order_by("-date_completed", "-timestamp")
 
     return render(request, "meteo/myroutes.html", {
-        "routes": routes
+        "routes": routes,
+        "locations": Route.LOCATION_CHOICES
     })
 
 @login_required
@@ -146,24 +148,54 @@ def addroute(request):
 
     if request.method == "POST":
         name = request.POST.get("name")
-        description = request.POST.get("description")
-        distance_km = request.POST.get("distance_km")
-        duration_minutes = request.POST.get("duration_minutes")
+        location = request.POST.get("location") or "Pirineus"
+        weather_info = request.POST.get("weather_info") or ""
+        distance_km = request.POST.get("distance_km") or None
+        duration_minutes = request.POST.get("duration_minutes") or None
+        duration_minutes = request.POST.get("duration_minutes") or None
         date_completed = request.POST.get("date_completed")
 
-    if not name:
-        messages.error(request, "Please fill in the required field: name.")
-        return redirect("addroute")  
+        required_fields = {
+            "name": name,
+            "location": location,
+            "date": date_completed,
+        }
+
+        if not all(required_fields.values()):
+            messages.error(request, "Please complete all required fields name, location and date.")
+            return redirect("myroutes")
     
-    new_route = Route(
-        owner = request.user,
-        name = name,
-        description = description,
-        distance_km = distance_km,
-        duration_minutes = duration_minutes,
-        date_completed = date_completed
+        new_route = Route(
+            owner = request.user,
+            name = name,
+            location = location,
+            weather_info = weather_info,
+            distance_km = distance_km,
+            duration_hours = duration_hours,
+            duration_minutes = duration_minutes,
+            date_completed = date_completed
+        )
+
+        new_route.save()
+        messages.success(request, "Your route was saved successfully")
+        return redirect("myroutes")
+
+    else:
+        location = Route.LOCATION_CHOICES
+        return render(request, "meteo/myroutes.html", {
+            "location": location
+        })
+
+@login_required
+@require_POST
+def deleteroute(request, route_id):
+    route = get_object_or_404(
+        Route,
+        id=route_id,
+        owner=request.user
     )
 
-    new_route.save()
-    messages.success(request, "Your route was saved successfully")
+    route.delete()
+
+    messages.success(request, "Route deleted successfully.")
     return redirect("myroutes")

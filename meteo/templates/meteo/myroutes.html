@@ -7,7 +7,7 @@
 
 <!-- To display messages -->
     {% if messages %}
-        <div class="messages">
+        <div id="messages">
             {% for message in messages %}
                 <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
                     {{ message }}
@@ -29,14 +29,25 @@
         <div id="form-content" class="form-content">
             <form action="{% url 'addroute' %}" method="post" class="addroute-form">
                 {% csrf_token %}
-                <input type="text" name="name" placeholder="Route name" required class="form-field">
+                <div class="form-main-info">
+                    <input type="text" name="name" placeholder="Route name" required class="form-field">
+                
+                    <select name="location" id="location">
+                        <option value="" disabled selected>Select location</option>
+                        {% for value, label in locations %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
 
-                <textarea name="description" placeholder="Description" class="form-field"></textarea>
+                </div>
+
+                <textarea name="weather_info" placeholder="Any weather info you want to save and share?" class="form-field"></textarea>
 
                 <div class="form-extra-info">
                     <input type="number" name="distance_km" placeholder="Distance in km">
-                    <input type="number" name="duration_minutes" placeholder="Duration in minutes">
-                    <input type="date" name="date_completed" placeholder="Date when route was completed">
+                    <input type="number" name="duration_hours" placeholder="Duration (hours)">
+                    <input type="number" name="duration_minutes" placeholder="Duration (minutes)">
+                    <input type="date" name="date_completed" placeholder="Date when route was completed" required>
                 </div>
 
                 <div class="form-actions">
@@ -51,27 +62,66 @@
         <div class="routes-grid">
             {% for route in routes %}
                 <article class="route-card">
-                    <h3>
-                        {{ route.name }}
-                    </h3>
+                    <div class="route-header">
+                        <h3>
+                            {{ route.name }}
+                        </h3>
+                        <form action="{% url 'deleteroute' route.id %}" method="post">
+                            {% csrf_token %}
 
-                    {% if route.date_completed %}
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-outline-info delete-btn"
+                                onclick="return confirm('Are you sure you want to delete this route?');"
+                            >
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="sub-header">
                         <p>
-                            Completed on {{ route.date_completed }}
+                            {{ route.location }}
+                        </p>
+
+                        {% if route.date_completed %}
+                            <p>
+                                · {{ route.date_completed }} 
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="dist-time">
+                        {% if route.distance_km %}
+                            <p>
+                                <span style="font-weight: 700">Distance:</span> {{ route.distance_km }} km
+                            </p>
+                        {% else %}
+                            <p>
+                                No distance info
+                            </p>
+                        {% endif %}
+                        
+                        <div class="time">
+                            <p>
+                                <span style="font-weight: 700">Duration:</span>
+                                {{ route.duration_hours|default:"00" }}h
+                                {{ route.duration_minutes|default:"00" }} min
+                            </p>
+                        </div>
+                    </div>
+
+                    {% if route.weather_info %}
+                        <p>
+                            <span style="font-weight: 700">Weather & snow info:</span> {{ route.weather_info }}
+                        </p>
+                    {% else %}
+                        <p>
+                            *No weather or snow info
                         </p>
                     {% endif %}
 
-                    {% if route.distance_km %}
-                        <p>
-                            Distance: {{ route.distance_km }} km
-                        </p>
-                    {% endif %}
-
-                    {% if route.duration_minutes %}
-                        <p>
-                            Duration: {{ route.duration_minutes }} minutes
-                        </p>
-                    {% endif %}
                 </article>
             {% endfor %}
         </div>
@@ -110,7 +160,20 @@
         setTimeout(function() {
             showFormBtn.style.display = "inline-block";
         }, 300);
-    });    
+    });  
+
+
+    setTimeout(() => {
+        const messages = document.getElementById("messages");
+
+        if (messages) {
+            messages.style.opacity = "0";
+
+            setTimeout(() => {
+                messages.remove();
+            }, 5000);
+        }
+    }, 3000); 
        
 </script>
 

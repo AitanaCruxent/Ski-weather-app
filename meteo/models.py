@@ -46,13 +46,24 @@ class Summit(models.Model):
     
 
 class Route(models.Model): 
+
+    LOCATION_CHOICES = [
+    ('Val dAran', 'Val dAran'),
+    ('Pallars', 'Pallars'),
+    ('Alta Ribagorça', 'Alta Ribagorça'),
+    ('Cerdanya', 'Cerdanya'), 
+    ('Ripollés', 'Ripollés'),
+    ('Pirineus', 'Pirineus'),
+    ]
     
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length = 100)
-    description = models.TextField(max_length=100, blank=True)
+    location = models.CharField(max_length =64, choices=LOCATION_CHOICES, default='Pirineus')
+    weather_info = models.TextField(max_length=100, blank=True, null=True)
     distance_km = models.DecimalField(max_digits= 6, decimal_places= 2, null=True, blank=True)
+    duration_hours = models.PositiveIntegerField(null=True, blank=True)
     duration_minutes = models.PositiveIntegerField(null=True, blank=True)
-    date_completed = models.DateField(null=True, blank=True)
+    date_completed = models.DateField(blank=True, null= True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

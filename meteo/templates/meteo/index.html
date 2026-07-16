@@ -37,48 +37,88 @@
             {% if routes %}
                 {% for route in routes %}
                     <article class="route-card">
-                                <h3>
-                                    {{ route.name }}
-                                </h3>
+                                <div class="route-header">
+                                    <h3>
+                                        {{ route.name }}
+                                    </h3>
 
-                                {% if route.date_completed %}
+                                    {% if route.owner == request.user %}
+                                    <form action="{% url 'deleteroute' route.id %}" method="post">
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-info delete-btn"
+                                            onclick="return confirm('Are you sure you want to delete this route?');"
+                                        >
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+
+                                <div class="sub-header">
                                     <p>
-                                        Completed on <span style= "font-weight: 700">{{ route.date_completed }}</span>
+                                        {{ route.location }}
+                                    </p>
+
+                                    {% if route.date_completed %}
+                                        <p>
+                                            · {{ route.date_completed }} 
+                                        </p>
+                                    {% endif %}
+
+                                    <p>
+                                        · by <span style= "font-weight: 700">{{ route.owner }}</span>
+                                    </p>
+
+                                </div>
+
+                                <div class="dist-time">
+                                    {% if route.distance_km %}
+                                        <p>
+                                            <span style="font-weight: 700">Distance:</span> {{ route.distance_km }} km
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            No distance info
+                                        </p>
+                                    {% endif %}
+                                    
+                                    <div class="time">
+                                        <p>
+                                            <span style="font-weight: 700">Duration:</span>
+                                            {{ route.duration_hours|default:"00" }}h
+                                            {{ route.duration_minutes|default:"00" }} min
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {% if route.weather_info %}
+                                    <p>
+                                        <span style="font-weight: 700">Weather & snow info:</span> {{ route.weather_info }}
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        *No weather or snow info
                                     </p>
                                 {% endif %}
+                    </article>
+                {% endfor %}
+        </div>
 
-                                <p>
-                                    Completed by <span style= "font-weight: 700">{{ route.owner }}</span>
-                                </p>
+            {% else %}
+                <div class="empty-state">
+                    <h2>There is no routes at the moment</h2>
 
+                    <p>
+                        Add your first route to start building your personal log.
+                    </p>
 
-                                {% if route.distance_km %}
-                                    <p>
-                                        Distance: {{ route.distance_km }} km
-                                    </p>
-                                {% endif %}
-
-                                {% if route.duration_minutes %}
-                                    <p>
-                                        Duration: {{ route.duration_minutes }} minutes
-                                    </p>
-                                {% endif %}
-                            </article>
-                        {% endfor %}
-                    </div>
-
-                {% else %}
-                    <div class="empty-state">
-                        <h2>There is no routes at the moment</h2>
-
-                        <p>
-                            Add your first route to start building your personal log.
-                        </p>
-
-                        <a href="{% url 'myroutes' %}">
-                            Add your first route
-                        </a>
-                    </div>
+                    <a href="{% url 'myroutes' %}">
+                        Add your first route
+                    </a>
+                </div>
             {% endif %}
         </div>
     </section>
