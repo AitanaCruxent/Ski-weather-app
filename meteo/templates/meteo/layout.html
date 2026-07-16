@@ -12,6 +12,9 @@
 
         <!-- Added for security when loading external resources (like Leaflet CSS/JS) to prevent leaking referrer info on cross-origin requests. This is a good practice when using third-party libraries. -->
         <meta name="referrer" content="strict-origin-when-cross-origin"> 
+
+        <!-- Web icon-->
+        <link rel="icon" type="svg" href="{% static 'images/favicon.svg' %}">
         {% block extra_head %}
         {% endblock %}
     </head>
