@@ -6,13 +6,18 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.utils import timezone
+from datetime import timedelta
+
 
 from .models import User, Resort, Summit, Route
 
 
 def index(request):
 
-    routes = Route.objects.order_by("-date_completed", "-timestamp")
+    one_week_ago = timezone.now() - timedelta(days=7)
+
+    routes = Route.objects.filter(timestamp__gte=one_week_ago).order_by("-date_completed")
 
     return render(request, "meteo/index.html", {
         "routes": routes
