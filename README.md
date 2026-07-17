@@ -1,8 +1,8 @@
 # PiriNeu
 
-PiriNeu is a Django web application created as my final project for CS50W. The project is a mountain weather and route-oriented web application focused on the Catalan Pyrenees and snow activites. At the moment, it only gives detailed information about snow prediction and temperature. Its main goal is to bring together useful information for people who ski, or spend time in the Catalan mountains during winter. The application currently includes weather-focused pages for ski resorts, a section for main summits, an avalanche-risk information page, and a personal route-saving feature for authenticated users. 
+PiriNeu is a Django web application created as my final project for CS50's Web Programming with Python and Javascript. The project is a mountain weather and route-oriented web application focused on the Catalan Pyrenees and snow activites. At the moment, it only gives detailed information about snow prediction and temperature. Its main goal is to bring together useful information for people who ski, or spend time in the Catalan mountains during winter. The application currently includes weather-focused pages for ski resorts, a section for main summits, an avalanche-risk information page, and a personal route-saving feature for authenticated users. 
 
-This project started from a simple idea: I wanted to build something useful and connected to a real interest of mine. I am a huge fan of mountain sports and in particular winter sports as skiing and backcountry skiing. Catalunya has many ski resorts and mountain areas, and many websites provide usefull information, but there is one thing I miss during winter season: somewhere to see the snow prediction for all the important points of the country at a glance. Therefore, I created a web app that helps you decide where to go depending on the snow prediction and you can check several points in the map at the same time.
+This project started from a simple idea: I wanted to build something useful and connected to a real interest of mine. I am a huge fan of mountain sports and in particular winter sports as skiing and backcountry skiing. Catalunya has many ski resorts and mountain areas, and many websites provide usefull information, but there is one thing I miss during winter season: somewhere to see the snow prediction for all the important points of the country at a glance. Therefore, I created a web app where you can check several points in the map at the same time and could help you decide where to go depending on the snow prediction.
 
 About the naming, Pirineu is Pyernees in Catalan and Neu is snow, so I combined the two words creating PiriNeu to make emphasis that this web application is centered in snow weather and snow activities, for now.
 
@@ -46,7 +46,7 @@ The database includes summits such as Pica d’Estats, Pedraforca, Puigpedrós, 
 
 ### Avalanche Bulletin
 
-For only authenticated users, the avalanche bulletin page displays updated avalanche danger information from an official external source. I included this because avalanche danger is an important part of mountain safety, especially in winter and spring conditions. Instead of manually copying this information, the project embeds the external ICGC (Institut Cartogràfic i Geològic de Catalunya) bulletin so that users can consult the original up-to-date source from within the application.
+For only authenticated users, the avalanche bulletin page displays updated avalanche danger information from an official external source. I included this because avalanche danger is an important part of mountain safety, especially in winter and spring conditions. Instead of manually copying this information, the project embeds the external bulletin so that users can consult the original up-to-date source from within the application.
 
 ### My Routes
 
@@ -152,7 +152,7 @@ The fixtures folder contains JSON data that can be loaded into the database auto
 
 This file contains the Python packages required to run the project.
 
-At the moment, the project uses Django and its dependencies:
+The project only requires Django and its standard dependencies. No additional third-party Python packages are needed.:
 
 ```txt
 asgiref==3.11.0
@@ -256,4 +256,4 @@ This project uses the following technologies and services:
 - Leaflet
 - OpenStreetMap
 - Open-Meteo
-- Official avalanche bulletin information from ICGC
+- Official avalanche bulletin information from ICGC (Institut Cartogràfic i Geològic de Catalunya).
