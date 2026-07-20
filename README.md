@@ -34,7 +34,7 @@ The home page introduces the application and gives users a general overview of w
 
 ### Ski Resorts
 
-For only authenticated users, the ski resorts page displays the ski resorts in Catalunya. Each resort is represented with information such as its name, location, top and base elevation, and snow and temperature details. The page also includes an interactive map, which makes the data easier to understand visually.
+For only authenticated users, the ski resorts page displays the ski resorts in Catalunya. Each resort is represented with information such as its name, location, top and base elevation, and snow and temperature details. The snow forecast is for the upcoming 6 hours. The page also includes an interactive map, which makes the data easier to understand visually. 
 
 The ski resorts included in the project are focused on Catalunya and the Pyrenees. Examples include La Molina, Masella, Baqueira Beret, Boí Taüll, Espot, Port Ainé, Vall de Núria, Vallter, and Port del Comte.
 
