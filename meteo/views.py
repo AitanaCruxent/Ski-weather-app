@@ -156,7 +156,7 @@ def addroute(request):
         location = request.POST.get("location") or "Pirineus"
         weather_info = request.POST.get("weather_info") or ""
         distance_km = request.POST.get("distance_km") or None
-        duration_minutes = request.POST.get("duration_minutes") or None
+        duration_hours = request.POST.get("duration_hours") or None
         duration_minutes = request.POST.get("duration_minutes") or None
         date_completed = request.POST.get("date_completed")
 
